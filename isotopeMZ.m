@@ -1,11 +1,10 @@
 classdef isotopeMZ
 
     properties (Constant = true)
-       version = '0.0.2'; 
+       version = '0.0.3'; 
     end
     properties
-        z
-        maxOutput
+        z_max
         inputMZ
     end
     
@@ -15,8 +14,7 @@ classdef isotopeMZ
     
     methods
         function obj = isotopeMZ()
-            obj.z = 1;
-            obj.maxOutput = 1;
+            obj.z_max = 4;
             obj.inputMZ = [];
         end
         
@@ -24,9 +22,10 @@ classdef isotopeMZ
             clc
             obj = validateInput(obj);
             fprintf('*********************\n');
-            for j = 1:obj.maxOutput
-                mzOutput = obj.inputMZ+(obj.mass13C/obj.z);
-                fprintf('Isotope %d:    m/z %.5f \n',j,mzOutput);
+            fprintf('Theoretical m/z 13C isotope at charge z \n');
+            for j = 1:obj.z_max
+                mzOutput = double(obj.inputMZ+(obj.mass13C/double(j)));
+                fprintf('z = %d:    m/z %.5f \n',j,mzOutput);
             end
             fprintf('*********************\n');
         end
@@ -36,19 +35,16 @@ classdef isotopeMZ
                disp('Enter a value for input m/z');
                return
            end
-           if ~isnumeric(obj.inputMZ) || ~isnumeric(obj.z) || ~isnumeric(obj.maxOutput)
+           if ~isnumeric(obj.inputMZ) || ~isnumeric(obj.z_max) 
                disp('All input values should be numbers');
                return
            end
-           if obj.inputMZ < 1 || obj.z < 1 || obj.maxOutput  < 1
+           if obj.inputMZ < 1 || obj.z_max < 1 
               disp('All input values should be 1 or greater');
               return
            end
-           if ~isinteger(obj.z)
-               obj.z = uint8(obj.z);
-           end
-           if ~isinteger(obj.maxOutput)
-               obj.maxOutput = uint8(obj.maxOutput); 
+           if ~isinteger(obj.z_max)
+              obj.z_max = uint8(obj.z_max);
            end
         end
     end
